@@ -24,4 +24,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: vamwilder/login-app:latest
+          tags: vamwilder/meu-site:latest
