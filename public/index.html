@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Login Simples</title>
+<style>
+body { font-family: Arial; text-align: center; margin-top: 50px; }
+input { margin: 5px; padding: 8px; width: 200px; }
+button { padding: 8px 20px; margin: 5px; }
+</style>
+</head>
+<body>
+<h2>Login</h2>
+<input id="userLogin" placeholder="Usuário"><br>
+<input id="passLogin" type="password" placeholder="Senha"><br>
+<button onclick="login()">Entrar</button>
+
+<h3>Registrar novo usuário</h3>
+<input id="userNew" placeholder="Novo usuário"><br>
+<input id="passNew" type="password" placeholder="Nova senha"><br>
+<button onclick="register()">Registrar</button>
+
+<h3>Usuários cadastrados:</h3>
+<ul id="userList"></ul>
+
+<script>
+async function register() {
+  const res = await fetch('/register', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      username: userNew.value,
+      password: passNew.value
+    })
+  });
+  if (res.ok) alert('Usuário registrado!');
+  else alert('Erro ao registrar.');
+  loadUsers();
+}
+
+async function login() {
+  const res = await fetch('/login', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      username: userLogin.value,
+      password: passLogin.value
+    })
+  });
+  if (res.ok) alert('Login bem-sucedido!');
+  else alert('Usuário ou senha incorretos.');
+}
+
+async function loadUsers() {
+  const res = await fetch('/users');
+  const users = await res.json();
+  userList.innerHTML = '';
+  users.forEach(u => {
+    userList.innerHTML += `<li>${u.username}</li>`;
+  });
+}
+loadUsers();
+</script>
+</body>
+</html>
